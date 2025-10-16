@@ -1,10 +1,17 @@
 import React from "react";
 import { Pressable, StyleSheet, Text } from "react-native";
 
-export default function IniciarButton({ title = "Iniciar", onPress }) {
+export default function IniciarButton({ 
+  title = "Iniciar", 
+  onPress 
+}) {
   return (
-    <Pressable style={styles.button} onPress={onPress}>
-      <Text style={styles.text}>{title}</Text>
+    <Pressable style={styles.button} 
+      onPress={onPress}
+      >
+      <Text style={styles.text}>
+        {title}
+      </Text>
     </Pressable>
   );
 }

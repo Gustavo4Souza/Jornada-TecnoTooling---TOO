@@ -3,25 +3,14 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TextInputProps,
-  View,
+  View
 } from "react-native";
-
-// Define as propriedades que o componente aceita.
-// label: texto do rótulo do campo.
-// icon: ícone opcional exibido ao lado do campo.
-// ...textInputProps: todas as outras props do TextInput.
-interface CustomInputProps extends TextInputProps {
-  label: string;
-  icon?: string;
-}
-
-// Componente funcional que renderiza um campo de entrada customizado.
+// Props esperadas pelo componente CustomInput
 export default function CustomInput({
   label,
   icon,
   ...textInputProps
-}: CustomInputProps) {
+}) {
   return (
     <View style={styles.containerImput}>
       <View style={styles.containerRotuloeInput}>
