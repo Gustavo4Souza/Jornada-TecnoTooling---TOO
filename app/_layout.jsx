@@ -1,50 +1,41 @@
-import { DrawerContentScrollView, DrawerItemList } from "@react-navigation/drawer";
-import { LinearGradient } from "expo-linear-gradient";
+import { Ionicons } from "@expo/vector-icons";
 import { Drawer } from "expo-router/drawer";
-import { Image, StyleSheet, View } from "react-native";
+import { Image, Pressable, StyleSheet, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
-// Componente customizado para o conteúdo do drawer
-function CustomDrawerContent(props) {
+
+function Header({ navigation }) {
   return (
-    <DrawerContentScrollView {...props} contentContainerStyle={styles.drawerContentContainer}>
-      <LinearGradient colors={["#175476", "#213549"]} style={styles.gradientContainer}>
-        {/* Container da imagem */}
-        <View style={styles.imageContainer}>
-          <Image
-            source={require("../assets/images/TecnoTooling/icone branco.png")}
-            style={styles.drawerImage}
-            resizeMode="contain"
-          />
-        </View>
-        {/* Lista de itens do drawer */}
-        <DrawerItemList {...props} />
-      </LinearGradient>
-    </DrawerContentScrollView>
+    <View style={styles.Container}>
+      <View style={styles.Header}>
+        <Image
+          source={require("../assets/images/TecnoTooling/LogoGrandeEmBranco.png")}
+          style={styles.HeaderImage}
+        />
+        <Pressable style={styles.menuButton}
+          onPress={() => navigation.openDrawer()}
+        >
+          <Ionicons name="menu" size={24} color="white" />
+        </Pressable>
+      </View >
+    </View >
   );
 }
 
-export default function Layout() {
+export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer
-        drawerContent={(props) => <CustomDrawerContent {...props} />}
         screenOptions={{
-          headerStyle: { backgroundColor: "#175476" },
-          headerTintColor: "#fff",
-          drawerStyle: { backgroundColor: "transparent" },
-          drawerLabelStyle: { color: "#fff" },
-        }}>  
+          header: ({ navigation }) => <Header navigation={navigation} />,
+        }}>
         <Drawer.Screen
           name="index"
           options={{ headerShown: false, drawerItemStyle: { display: "none" } }}
         />
         <Drawer.Screen
           name="register"
-          options={{ 
-            drawerLabel: "Login",
-            title: "Login"
-          }}
+          options={{ headerShown: false, drawerItemStyle: { display: "none" } }}
         />
       </Drawer>
     </GestureHandlerRootView>
@@ -52,26 +43,20 @@ export default function Layout() {
 }
 
 const styles = StyleSheet.create({
-  drawerContentContainer: {
-    flex: 1,
+  Container: {
+    backgroundColor: "#fff",
+    height: 70,
   },
-  gradientContainer: {
-    flex: 1,
-    paddingTop: 20,
+  Header: {},
+  HeaderImage: {
+    position: "absolute",
+    width: "100%",
   },
-  drawerContainer: {
-    backgroundColor: "#175476",
+  menuButton: {
+    position: "absolute",
+    top: 20,        // Ajustado de 70 para 20
+    left: 20,
+    zIndex: 1,      // Para ficar acima da imagem
   },
-  imageContainer: {
-    alignItems: "center",
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: "#213549",
-    marginBottom: 10,
-  },
-  drawerImage: {
-    width: 120,
-    height: 80,
-  },
+
 });

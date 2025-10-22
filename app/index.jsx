@@ -1,7 +1,9 @@
-import IniciarButton from "@/components/IniciarButton";
+// Unica tela que está OK
+
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { Image, StyleSheet } from "react-native";
+import HomeButton from "../components/HomeButton";
 
 export default function StartScreen() {
   return (
@@ -9,8 +11,8 @@ export default function StartScreen() {
       <Image
         source={require("../assets/images/TecnoTooling/LogoEmBranco.png")}
       />
-      <IniciarButton 
-      title="Login"
+      <HomeButton 
+      text="Vamos Começar?"
       onPress={() => router.replace("/register")} 
       />
     </LinearGradient>

@@ -13,5 +13,5 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "components/CustomInput.jsx", "components/IniciarButton.jsx", "app/index.jsx", "app/chat.jsx", "app/register.jsx", "screens/Start.jsx"  ]
+, "components/CustomInput.jsx", "components/HomeButton.jsx", "app/index.jsx", "app/chat.jsx", "app/register.jsx", "screens/Start.jsx"  ]
 }

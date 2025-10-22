@@ -1,10 +1,10 @@
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import React, { useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import CustomInput from "../components/CustomInput";
-import IniciarButton from "../components/IniciarButton";
+import HomeButton from "../components/HomeButton";
 
-// Componente principal da tela de login
 export default function RegisterScreen() {
   // Estado para armazenar o email digitado pelo usuário
   const [email, setEmail] = useState("");
@@ -26,7 +26,7 @@ export default function RegisterScreen() {
       <Image
         source={require("../assets/images/TecnoTooling/LogoEmBranco.png")}
       />
-      <View>
+      <View style={styles.Wrapper}>
         <CustomInput
           label="Email:"
           placeholder="Entre com o seu endereço de email"
@@ -42,7 +42,9 @@ export default function RegisterScreen() {
           onChangeText={setPassword}
           secureTextEntry={true}
         />
-        <IniciarButton title="Login" onPress={handleLogin} />
+        <HomeButton
+          text="Login"
+          onPress={() => router.navigate("/chat")} />
       </View>
     </LinearGradient>
   );
@@ -51,8 +53,13 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
-    gap: 166,
+    justifyContent: "center",
+    gap: 170,
+  },
+  Wrapper: {
+    alignItems: "center",
+    width: "100%",
+    gap: 10,
   },
 });
