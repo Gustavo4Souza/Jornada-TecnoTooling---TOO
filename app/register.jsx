@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Image, StyleSheet, View } from "react-native";
 import CustomInput from "../components/CustomInput";
 import HomeButton from "../components/HomeButton";
+import { API_URL } from "./config";
 
 export default function RegisterScreen() {
   // Estado para armazenar o email digitado pelo usuário
@@ -63,3 +64,12 @@ const styles = StyleSheet.create({
     gap: 10,
   },
 });
+
+fetch(`${API_URL}/register`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email, senha }),
+})
+  .then((res) => res.json())
+  .then((data) => console.log(data))
+  .catch((err) => console.error("Erro ao conectar:", err));
