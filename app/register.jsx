@@ -65,11 +65,15 @@ const styles = StyleSheet.create({
   },
 });
 
-fetch(`${API_URL}/register`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ email, senha }),
-})
-  .then((res) => res.json())
-  .then((data) => console.log(data))
-  .catch((err) => console.error("Erro ao conectar:", err));
+import { API_URL } from "./config";
+
+async function handleRegister() {
+  const response = await fetch(`${API_URL}/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+
+  const data = await response.json();
+  console.log(data);
+}
