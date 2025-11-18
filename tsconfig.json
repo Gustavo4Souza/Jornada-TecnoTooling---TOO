@@ -1,7 +1,9 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true,
+    "strict": false,
+    "allowJs": true,
+    "checkJs": false,
     "paths": {
       "@/*": [
         "./*"
@@ -11,7 +13,12 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts"
-, "components/CustomInput.jsx", "components/HomeButton.jsx", "app/index.jsx", "app/chat.jsx", "app/register.jsx", "screens/Start.jsx"  ]
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

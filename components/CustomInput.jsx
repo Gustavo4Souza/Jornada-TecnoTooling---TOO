@@ -1,4 +1,5 @@
 import React from "react";
+import { Ionicons } from "@expo/vector-icons";
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -25,7 +26,16 @@ export default function CustomInput({
             {label}
           </Text>
           <View style={styles.Imput}>
-            <TextInput style={styles.TextInput}
+            {icon && (
+              <Ionicons 
+                name={icon} 
+                size={20} 
+                color="#888" 
+                style={styles.icon}
+              />
+            )}
+            <TextInput 
+              style={[styles.TextInput, icon && styles.TextInputWithIcon]}
               placeholderTextColor="#A9A9A9"
               {...textInputProps}
             />
@@ -48,14 +58,23 @@ const styles = StyleSheet.create({
     color: "#FFF",
   },
   Imput: {
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 10,
+    paddingHorizontal: 10,
     backgroundColor: "#FFF",
     borderColor: "#000",
     borderWidth: 1,
     borderRadius: 10,
   },
+  icon: {
+    marginRight: 8,
+  },
   TextInput: {
-    paddingHorizontal: 10,
+    flex: 1,
     fontSize: 10,
+  },
+  TextInputWithIcon: {
+    paddingLeft: 0,
   },
 });
