@@ -2,26 +2,36 @@ import { Ionicons } from "@expo/vector-icons";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { LinearGradient } from "expo-linear-gradient";
 import { Drawer } from "expo-router/drawer";
-import { router } from "expo-router"; // Import importante para o Logout
+import { router, usePathname } from "expo-router";
 import { Image, Pressable, StyleSheet, TextInput, View, Text } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ChatProvider, useChat } from "../context/ChatContext"; // Import do Contexto
 
 function CustomDrawerContent(props) {
+  const pathname = usePathname();
 
-  // 1. Lógica: Função de Logout (antes do return)
+  // USAMOS O CONTEXTO PARA LISTAR O HISTÓRICO
+  const { history } = useChat();
+
   const handleLogout = () => {
-    // Redireciona para a tela de registro/login
     router.replace("/register");
   };
 
-  // 2. Visual: O layout do menu
+  const handleNewChat = () => {
+    router.push("/chat");
+  };
+
+  const handleHistorySelect = (chatId) => {
+    router.push({ pathname: "/chat", params: { chatId: chatId } });
+  };
+
   return (
     <LinearGradient
       colors={["#175476", "#213549"]}
       style={styles.drawerGradient}>
 
-      {/* Header com logo e busca */}
+      {/* Header */}
       <View style={styles.drawerHeader}>
         <Image
           source={require("../assets/images/TecnoTooling/icone branco.png")}
@@ -37,48 +47,47 @@ function CustomDrawerContent(props) {
         </View>
       </View>
 
-      {/* --- Botão de Logout --- */}
+      {/* Botão Sair */}
       <Pressable style={styles.logoutButton} onPress={handleLogout}>
         <Ionicons name="log-out-outline" size={20} color="#ff8fab" />
         <Text style={[styles.newChatText, { color: "#ff8fab" }]}>Sair</Text>
       </Pressable>
 
       {/* Botão Novo Chat */}
-      <Pressable style={styles.newChatButton}>
+      <Pressable style={styles.newChatButton} onPress={handleNewChat}>
         <Ionicons name="create-outline" size={20} color="#fff" />
         <Text style={styles.newChatText}>Novo Chat</Text>
       </Pressable>
 
-      {/* Área scrollável com histórico */}
       <DrawerContentScrollView
         {...props}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scrollContent}
       >
-
-        {/* Seção HISTÓRICO */}
         <View style={styles.historySection}>
           <View style={styles.historyHeader}>
             <Ionicons name="calendar-outline" size={16} color="#fff" />
             <Text style={styles.historyTitle}>HISTÓRICO</Text>
           </View>
 
-          {/* Lista de Histórico (Exemplo estático) */}
+          {/* LISTA DINÂMICA DO CONTEXTO */}
           <View style={styles.historyList}>
-            <Pressable style={styles.historyItem}>
-              <Text style={styles.historyItemTitle}>Vale Transporte</Text>
-              <Text style={styles.historyItemDate}>03/10/2025 • 18:28</Text>
-            </Pressable>
-            <Pressable style={styles.historyItem}>
-              <Text style={styles.historyItemTitle}>Vale Transporte</Text>
-              <Text style={styles.historyItemDate}>03/10/2025 • 18:28</Text>
-            </Pressable>
-             {/* Adicione mais itens aqui se quiser */}
+            {history.map((item) => (
+              <Pressable
+                key={item.id}
+                style={styles.historyItem}
+                onPress={() => handleHistorySelect(item.id)}
+              >
+                <Text style={styles.historyItemTitle}>{item.title}</Text>
+                <Text style={styles.historyItemDate}>{item.date}</Text>
+              </Pressable>
+            ))}
           </View>
+
         </View>
       </DrawerContentScrollView>
 
-      {/* Footer com perfil do usuário */}
+      {/* Footer */}
       <View style={styles.userProfile}>
         <View style={styles.profileIcon}>
           <Ionicons name="person" size={20} color="#fff" />
@@ -114,50 +123,52 @@ function Header({ navigation }) {
 
 export default function RootLayout() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Drawer
-        drawerContent={(props) => <CustomDrawerContent {...props} />}
-        screenOptions={{
-          header: ({ navigation }) => <Header navigation={navigation} />,
-          drawerInactiveTintColor: "#fff",
-          drawerActiveTintColor: "#fff",
-          drawerStyle: {
-            backgroundColor: "transparent",
-            width: 322,
-          },
-          drawerLabelStyle: {
-            color: "#fff",
-            fontSize: 16,
-          },
-          drawerItemStyle: {
-            borderRadius: 8,
-          },
-        }}>
-        <Drawer.Screen
-          name="index"
-          options={{
-            headerShown: false,
-            drawerItemStyle: { display: "none" }
-          }}
-        />
-        <Drawer.Screen
-          name="chat"
-          options={{
-            drawerLabel: "Novo Chat",
-            drawerIcon: ({ color, size }) => (
-              <Ionicons name="create-outline" size={size} color={color} />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="register"
-          options={{
-            headerShown: false,
-            drawerLabel: " "
-          }}
-        />
-      </Drawer>
-    </GestureHandlerRootView>
+    <ChatProvider>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Drawer
+          drawerContent={(props) => <CustomDrawerContent {...props} />}
+          screenOptions={{
+            header: ({ navigation }) => <Header navigation={navigation} />,
+            drawerInactiveTintColor: "#fff",
+            drawerActiveTintColor: "#fff",
+            drawerStyle: {
+              backgroundColor: "transparent",
+              width: 322,
+            },
+            drawerLabelStyle: {
+              color: "#fff",
+              fontSize: 16,
+            },
+            drawerItemStyle: {
+              borderRadius: 8,
+            },
+          }}>
+          <Drawer.Screen
+            name="index"
+            options={{
+              headerShown: false,
+              drawerItemStyle: { display: "none" }
+            }}
+          />
+          <Drawer.Screen
+            name="chat"
+            options={{
+              drawerLabel: "Novo Chat",
+              drawerIcon: ({ color, size }) => (
+                <Ionicons name="create-outline" size={size} color={color} />
+              ),
+            }}
+          />
+          <Drawer.Screen
+            name="register"
+            options={{
+              headerShown: false,
+              drawerLabel: " "
+            }}
+          />
+        </Drawer>
+      </GestureHandlerRootView>
+    </ChatProvider>
   );
 }
 
@@ -207,8 +218,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
   },
-
-  // Estilos do botão Logout
   logoutButton: {
     flexDirection: "row",
     alignItems: "center",
@@ -221,7 +230,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255, 80, 80, 0.2)",
   },
-
   newChatButton: {
     flexDirection: "row",
     alignItems: "center",
